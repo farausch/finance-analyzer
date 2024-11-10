@@ -1,10 +1,8 @@
-import csv
-from io import StringIO
 from fastapi import FastAPI, Depends, File, UploadFile
 from sqlalchemy.orm import Session
 from db_config import engine, SessionLocal
 from import_service import ImportService
-from mapping_config import LZO_MAPPING
+from import_config import Provider
 from model import Finance_Transaction, Base
 
 Base.metadata.create_all(bind=engine)
@@ -38,5 +36,5 @@ def read_finance_transactions(skip: int = 0, limit: int = 10, db: Session = Depe
     return transactions
 
 @app.post("/import_csv/")
-async def import_csv(file: UploadFile = File(...), db: Session = Depends(get_db)):
-    return import_service.import_data(file, db)
+async def import_csv(provider: Provider, file: UploadFile = File(...), db: Session = Depends(get_db)):
+    return await import_service.import_data(provider, file, db)

@@ -11,6 +11,8 @@ class Finance_Transaction(Base):
     value = Column(Numeric)
     description = Column(String)
     recipient = Column(String)
+    tx_type = Column(String)
+    account_number = Column(String)
 
 # Labels
 class Finance_Label(Base):

@@ -2,6 +2,9 @@
 data/
 *.db
 .env.sh
+cheatsheet.txt
+
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
