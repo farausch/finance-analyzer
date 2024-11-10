@@ -1,12 +1,10 @@
 import sqlite3
 import pandas as pd
 import os
-import matplotlib.pyplot as plt
-import plotly.express as px
 
 DATA_DIR = "data/annotated/"
 DB_NAME = "finance.db"
-LZO_MAPPING = {"Betrag": "value", "Buchungstag": "transaction_date"}
+LZO_MAPPING = {"Betrag": "value", "Buchungstag": "transaction_date", "Verwendungszweck": "description", "Beguenstigter/Zahlungspflichtiger": "recipient"}
 LZO_ENCODING = "ISO-8859-1"
 
 def get_dataframe(directory, mapping, encoding):
@@ -47,17 +45,7 @@ def get_data_complete(cursor):
         data.append(row)
     return data
 
-def plot_data_complete(data):
-    df = pd.DataFrame(data, columns=["category", "value", "month", "year"])
-    df["month_year"] = df["month"] + "-" + df["year"]
-    df.drop(columns=["month"], inplace=True)
-    df.drop(columns=["year"], inplace=True)
-    fig = px.line(df, x="month_year", y="value", color="category", markers=True, title="Finance Analysis")
-    fig.for_each_trace(lambda trace: trace.update(visible="legendonly"))
-    fig.show()
-
 df = get_dataframe(DATA_DIR, LZO_MAPPING, LZO_ENCODING)
 cursor = import_data(df, DB_NAME)
-get_data_monthly(cursor, 2022)
+get_data_monthly(cursor, 2024)
 get_all_categories(cursor)
-plot_data_complete(get_data_complete(cursor))

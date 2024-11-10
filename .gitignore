@@ -1,6 +1,7 @@
 **/.DS_Store
 data/
 *.db
+.env.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
