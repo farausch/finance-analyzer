@@ -36,7 +36,6 @@ def read_finance_transactions(skip: int = 0, limit: int = 10, db: Session = Depe
 
 @app.post("/import_csv/")
 async def import_csv(file: UploadFile = File(...), db: Session = Depends(get_db)):
-    # Read the uploaded CSV file
     contents = await file.read()
     csv_file = StringIO(contents.decode('utf-8'))
     #csv_file = StringIO(contents.decode('ISO-8859-1'))
@@ -45,18 +44,14 @@ async def import_csv(file: UploadFile = File(...), db: Session = Depends(get_db)
     csv_reader = csv.DictReader(csv_file, delimiter=';', quotechar='"', skipinitialspace=True)
     transactions = []
     for row in csv_reader:
-        print("--------------------")
-        print(row)
-        print("--------------------")
         transaction_date = row[LZO_MAPPING['transaction_date']]
         value = float(row[LZO_MAPPING['value']].replace(",", "."))
         description = row[LZO_MAPPING['description']]
         recipient = row[LZO_MAPPING['recipient']]
         
-        # Store the extracted data in the database
         db_finance_transaction = Finance_Transaction(transaction_date=transaction_date, value=value, description=description, recipient=recipient)
         db.add(db_finance_transaction)
         transactions.append(db_finance_transaction)
 
-    db.commit()  # Commit all transactions to the database
+    db.commit()
     return {"message": f"Successfully added {len(transactions)} finance transactions."}
