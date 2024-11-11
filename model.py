@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, Integer, Numeric, String, ForeignKey
+from sqlalchemy import Column, Date, Integer, Numeric, String, ForeignKey, func
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -13,12 +13,14 @@ class Finance_Transaction(Base):
     recipient = Column(String)
     tx_type = Column(String)
     account_number = Column(String)
+    import_file = Column(String)
+    import_date = Column(Date, server_default=func.current_date())
 
 # Labels
 class Finance_Label(Base):
     __tablename__ = "finance_labels"
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String, unique=True)
     display_name = Column(String)
 
 # Categories
@@ -39,19 +41,6 @@ class Finance_Transaction_Category(Base):
     __tablename__ = "finance_transaction_categories"
     transaction_id = Column(Integer, ForeignKey("finance_transactions.id"), primary_key=True)
     category_id = Column(Integer, ForeignKey("finance_categories.id"), primary_key=True)
-
-# Imports
-class Finance_Imports(Base):
-    __tablename__ = "finance_imports"
-    id = Column(Integer, primary_key=True)
-    import_date = Column(Date)
-    import_file = Column(String)
-
-# Transaction-Import m:n
-class Finance_Transaction_Import(Base):
-    __tablename__ = "finance_transaction_imports"
-    import_id = Column(Integer, ForeignKey("finance_imports.id"), primary_key=True)
-    transaction_id = Column(Integer, ForeignKey("finance_transactions.id"), primary_key=True)
 
 # Users
 class User(Base):

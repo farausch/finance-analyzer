@@ -3,6 +3,7 @@ data/
 *.db
 .env.sh
 cheatsheet.txt
+manage_pg_instance.sh
 
 .vscode/
 

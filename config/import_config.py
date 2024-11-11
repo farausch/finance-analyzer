@@ -63,6 +63,7 @@ class AirplusConfig(ProviderConfig):
         row['Umsatzdatum'] = row['Umsatzdatum'].replace('/', '.')
         row['Abgerechneter Betrag'] = row['Abgerechneter Betrag'].replace(',', '')
         row['Abgerechneter Betrag'] = float(row['Abgerechneter Betrag']) * -1
+        row['Händlername'] = row['Händlername'] + ' ' + row['Stadt']
         return row
 
 def get_provider_config(provider: Provider) -> ProviderConfig:

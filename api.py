@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Depends, File, UploadFile
 from sqlalchemy.orm import Session
-from db_config import engine, SessionLocal
-from import_service import ImportService
-from import_config import Provider
+from config.db_config import engine, SessionLocal
+from services.import_service import ImportService
+from config.import_config import Provider
 from model import Finance_Transaction, Base
 
 Base.metadata.create_all(bind=engine)
@@ -37,4 +37,4 @@ def read_finance_transactions(skip: int = 0, limit: int = 10, db: Session = Depe
 
 @app.post("/import_csv/")
 async def import_csv(provider: Provider, file: UploadFile = File(...), db: Session = Depends(get_db)):
-    return await import_service.import_data(provider, file, db)
+    return await import_service.import_data(provider, file.filename, file, db)

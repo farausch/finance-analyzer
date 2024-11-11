@@ -1,7 +1,7 @@
 import csv
 from datetime import datetime
 from io import StringIO
-from import_config import get_provider_config
+from config.import_config import get_provider_config
 from model import Finance_Transaction
 
 class ImportService:
@@ -9,7 +9,7 @@ class ImportService:
     def __init__(self):
         pass
 
-    async def import_data(self, provider, csv_file, db):
+    async def import_data(self, provider, filename, csv_file, db):
         provider_config = get_provider_config(provider)
 
         contents = await csv_file.read()
@@ -44,7 +44,8 @@ class ImportService:
                                                          description=description,
                                                          recipient=recipient,
                                                          tx_type=tx_type,
-                                                         account_number=account_number)
+                                                         account_number=account_number,
+                                                         import_file=filename)
             db.add(db_finance_transaction)
             transactions.append(db_finance_transaction)
 
