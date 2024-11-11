@@ -18,18 +18,6 @@ def get_db():
     finally:
         db.close()
 
-@app.post("/finance_transactions/", response_model=dict)
-def create_finance_transaction(transaction_date: str,
-                               value: float,
-                               description: str,
-                               recipient: str,
-                               db: Session = Depends(get_db)):
-    db_finance_transaction = Finance_Transaction(transaction_date=transaction_date, value=value, description=description, recipient=recipient)
-    db.add(db_finance_transaction)
-    db.commit()
-    db.refresh(db_finance_transaction)
-    return {"id": db_finance_transaction.id, "transaction_date": db_finance_transaction.transaction_date, "value": db_finance_transaction.value, "description": db_finance_transaction.description, "recipient": db_finance_transaction.recipient}
-
 @app.get("/finance_transactions/")
 def read_finance_transactions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     transactions = db.query(Finance_Transaction).offset(skip).limit(limit).all()
