@@ -14,6 +14,10 @@ class ProviderConfig(ABC):
     def get_parser_config(self):
         pass
 
+    @abstractmethod
+    def preprocess(self, row):
+        pass
+
 class LZOConfig(ProviderConfig):
     def get_mapping(self):
         return {
@@ -32,6 +36,10 @@ class LZOConfig(ProviderConfig):
             'skipinitialspace': True,
             'encoding': 'ISO-8859-1'
         }
+    
+    def preprocess(self, row):
+        row['Betrag'] = float(row['Betrag'].replace(',', '.'))
+        return row
 
 class AirplusConfig(ProviderConfig):
     def get_mapping(self):
@@ -51,14 +59,11 @@ class AirplusConfig(ProviderConfig):
             'encoding': 'UTF-8'
         }
     
-    # Problems
-    # , as thousands separator
-    # -1 multiplier
-    # Umlaute incorrectly encoded
-    # Date contains /
-
-    # Idea: add a preprocessor to the config for each provider
-    # Remove LzO specific preprocessing from import_service.py ()
+    def preprocess(self, row):
+        row['Umsatzdatum'] = row['Umsatzdatum'].replace('/', '.')
+        row['Abgerechneter Betrag'] = row['Abgerechneter Betrag'].replace(',', '')
+        row['Abgerechneter Betrag'] = float(row['Abgerechneter Betrag']) * -1
+        return row
 
 def get_provider_config(provider: Provider) -> ProviderConfig:
     if provider == Provider.LZO:

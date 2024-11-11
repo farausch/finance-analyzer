@@ -21,9 +21,8 @@ class ImportService:
                                     skipinitialspace=provider_config.get_parser_config()['skipinitialspace'])
         transactions = []
         for row in csv_reader:
+            provider_config.preprocess(row)
             transaction_date_str = row[provider_config.get_mapping()['transaction_date']]
-            # AirPlus specific
-            transaction_date_str = transaction_date_str.replace('/', '.')
             try:
                 transaction_date = datetime.strptime(transaction_date_str, '%d.%m.%y').date()
             except ValueError:
@@ -31,8 +30,7 @@ class ImportService:
                     transaction_date = datetime.strptime(transaction_date_str, '%d.%m.%Y').date()
                 except ValueError:
                     raise ValueError(f"Invalid date format for transaction_date: {transaction_date_str}")
-            # LzO specific
-            value = float(row[provider_config.get_mapping()['value']].replace(',', '.'))
+            value = float(row[provider_config.get_mapping()['value']])
             description = row[provider_config.get_mapping()['description']]
             recipient = row[provider_config.get_mapping()['recipient']]
             if 'tx_type' in provider_config.get_mapping():
