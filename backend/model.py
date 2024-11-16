@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Date, Integer, Numeric, String, ForeignKey, func
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
@@ -16,12 +17,30 @@ class Finance_Transaction(Base):
     import_file = Column(String)
     import_date = Column(Date, server_default=func.current_date())
 
+    labels = relationship(
+        "Finance_Label",
+        secondary="finance_transaction_labels",
+        back_populates="transactions"
+    )
+    
+    categories = relationship(
+        "Finance_Category",
+        secondary="finance_transaction_categories",
+        back_populates="transactions"
+    )
+
 # Labels
 class Finance_Label(Base):
     __tablename__ = "finance_labels"
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
     display_name = Column(String)
+
+    transactions = relationship(
+        "Finance_Transaction",
+        secondary="finance_transaction_labels",
+        back_populates="labels"
+    )
 
 # Categories
 class Finance_Category(Base):
@@ -30,16 +49,22 @@ class Finance_Category(Base):
     name = Column(String, unique=True)
     display_name = Column(String)
 
+    transactions = relationship(
+        "Finance_Transaction",
+        secondary="finance_transaction_categories",
+        back_populates="categories"
+    )
+
 # Transaction-Label m:n
 class Finance_Transaction_Label(Base):
     __tablename__ = "finance_transaction_labels"
-    transaction_id = Column(Integer, ForeignKey("finance_transactions.id"), primary_key=True)
+    transaction_id = Column(Integer, ForeignKey("finance_transactions.id"), primary_key=True, index=True)
     label_id = Column(Integer, ForeignKey("finance_labels.id"), primary_key=True)
 
 # Transaction-Category m:n
 class Finance_Transaction_Category(Base):
     __tablename__ = "finance_transaction_categories"
-    transaction_id = Column(Integer, ForeignKey("finance_transactions.id"), primary_key=True)
+    transaction_id = Column(Integer, ForeignKey("finance_transactions.id"), primary_key=True, index=True)
     category_id = Column(Integer, ForeignKey("finance_categories.id"), primary_key=True)
 
 # Users

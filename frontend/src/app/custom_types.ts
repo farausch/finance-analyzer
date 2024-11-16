@@ -9,4 +9,18 @@ export type FinanceTransaction = {
     recipient: string;
     account_number: string;
     import_date: string;
+    labels?: FinanceLabel[];
+    categories?: FinanceCategory[];
 };
+
+export type FinanceLabel = {
+    id: number;
+    name: string;
+    display_name: string;
+}
+
+export type FinanceCategory = {
+    id: number;
+    name: string;
+    display_name: string;
+}
