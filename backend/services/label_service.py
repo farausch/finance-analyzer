@@ -5,6 +5,10 @@ class LabelService:
     def __init__(self):
         pass
 
+    def get_labels(self, db):
+        labels = db.query(Finance_Label).all()
+        return labels
+
     def create_label(self, db, name, display_name):
         db.add(Finance_Label(name=name, display_name=display_name))
         db.commit()
