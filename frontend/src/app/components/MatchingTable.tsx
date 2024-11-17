@@ -8,6 +8,7 @@ import { FinanceLabel, FinanceTransaction } from '../custom_types';
 export type MatchingTableProps = {
   transactions: FinanceTransaction[];
   setSelectedFinanceTransactions: React.Dispatch<React.SetStateAction<FinanceTransaction[]>>;
+  onSingleRowClick: (record: FinanceTransaction) => void;
 };
 
 const columns: TableColumnsType<FinanceTransaction> = [
@@ -48,12 +49,12 @@ const columns: TableColumnsType<FinanceTransaction> = [
   {
     title: 'Labels',
     dataIndex: 'labels',
-    width: '7%',
+    width: '10%',
     ellipsis: true,
     render: (labels: FinanceLabel[]) => {
       return <>
         {labels.map((label) => {
-          return <Tag color='geekblue' key={label.id}>{label.display_name}</Tag>;
+          return <Tag color='purple' key={label.id}>{label.display_name}</Tag>;
         })}
       </>;
     }
@@ -75,7 +76,7 @@ const columns: TableColumnsType<FinanceTransaction> = [
   }
 ];
 
-const MatchingTable =  ({transactions, setSelectedFinanceTransactions}: MatchingTableProps) => {
+const MatchingTable =  ({transactions, setSelectedFinanceTransactions, onSingleRowClick}: MatchingTableProps) => {
 
   const rowSelection: TableRowSelection<FinanceTransaction> = {
     onSelect: (record, selected, selectedRows) => {
@@ -90,6 +91,13 @@ const MatchingTable =  ({transactions, setSelectedFinanceTransactions}: Matching
     <>
       <Table<FinanceTransaction>
         rowSelection={rowSelection}
+        onRow={(record) => {
+          return {
+            onClick: () => {
+              onSingleRowClick(record);
+            }
+          };
+        }}
         columns={columns}
         dataSource={transactions}
         pagination={false} />
