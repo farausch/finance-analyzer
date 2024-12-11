@@ -1,4 +1,5 @@
-from model import Finance_Label, Finance_Transaction_Label
+from model import Finance_Label, Finance_Transaction, Finance_Transaction_Label
+from sqlalchemy.orm import Session, joinedload
 
 class LabelService:
 
@@ -18,3 +19,24 @@ class LabelService:
         db.add(Finance_Transaction_Label(transaction_id=transaction_id, label_id=label_id))
         db.commit()
         return {"message": f"Successfully added label {label_id} to transaction {transaction_id}."}
+    
+    def add_label_by_keyword(self, db: Session, keyword: str, label_id: int):
+        transactions = (
+            db.query(Finance_Transaction)
+            .filter(
+                Finance_Transaction.description.ilike(f"%{keyword}%") |
+                Finance_Transaction.recipient.ilike(f"%{keyword}%")
+            )
+            .all()
+        )
+        applied_counter = 0
+        for transaction in transactions:
+            existing_label = db.query(Finance_Transaction_Label).filter_by(
+                transaction_id=transaction.id, label_id=label_id
+            ).first()
+
+            if not existing_label:
+                applied_counter += 1
+                db.add(Finance_Transaction_Label(transaction_id=transaction.id, label_id=label_id))
+        db.commit()
+        return {"message": f"Successfully added label {label_id} to {applied_counter} transactions containing the keyword '{keyword}'. {len(transactions) - applied_counter} transactions already had the label."}

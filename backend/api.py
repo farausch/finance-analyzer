@@ -51,6 +51,10 @@ async def import_csv(provider: Provider, file: UploadFile = File(...), db: Sessi
 def add_label_to_transaction(transaction_id: int, label_id: int, db: Session = Depends(get_db)):
     return label_service.add_label_to_transaction(db, transaction_id, label_id)
 
+@app.post("/transactions/auto-label")
+def add_label_by_keyword(keyword: str, label_id: int, db: Session = Depends(get_db)):
+    return label_service.add_label_by_keyword(db, keyword, label_id)
+
 @app.get("/labels/")
 def read_labels(db: Session = Depends(get_db)):
     return label_service.get_labels(db)
