@@ -5,14 +5,11 @@ import MatchingTable from "../components/MatchingTable";
 import { useState } from "react";
 import { FinanceLabel, FinanceTransaction } from "../custom_types";
 import { Dayjs } from "dayjs";
-import LabelModificationDrawer from "../components/LabelModificationDrawer";
 
-export default function Matching() {
+export default function FinanceTransactions() {
 
   const [financeTransactions, setFinanceTransactions] = useState<FinanceTransaction[]>([]);
   const [selectedFinanceTransactions, setSelectedFinanceTransactions] = useState<FinanceTransaction[]>([]);
-  const [singleClickedFinanceTransactionId, setSingleClickedFinanceTransactionId] = useState<number | null>(null);
-  const [labelModificationDrawerOpen, setLabelModificationDrawerOpen] = useState<boolean>(false);
   const [allLabels, setAllLabels] = useState<FinanceLabel[]>([]);
 
   const getTransactionsForMonth = async (date: Dayjs) => {
@@ -33,11 +30,6 @@ export default function Matching() {
   };
 
   const onSingleRowClick = async (record: FinanceTransaction) => {
-    if (allLabels.length === 0) {
-      await fetchAllLabels();
-    }
-    setSingleClickedFinanceTransactionId(record.id);
-    setLabelModificationDrawerOpen(true);
   }
 
   const fetchAllLabels = async () => {
@@ -52,33 +44,12 @@ export default function Matching() {
         <div>
           <DatePicker onChange={selectedMonthChange} picker="month" format={'MM.YYYY'} />
         </div>
-        <div>
-          <Button
-            type="primary"
-            disabled={selectedFinanceTransactions.length === 0}
-            onClick={() => {
-              alert(selectedFinanceTransactions.map((tx) => tx.id).join(', '));
-            }}
-          >
-          Label zuordnen
-          </Button>
-        </div>
       </div>
       <MatchingTable
         transactions={financeTransactions}
         setSelectedFinanceTransactions={setSelectedFinanceTransactions}
         onSingleRowClick={onSingleRowClick}
       />
-      {singleClickedFinanceTransactionId && (
-        <LabelModificationDrawer
-          open={labelModificationDrawerOpen}
-          setOpen={setLabelModificationDrawerOpen}
-          transactions={financeTransactions}
-          setTransactions={setFinanceTransactions}
-          selectedTransactionId={singleClickedFinanceTransactionId}
-          allLabels={allLabels}
-        />
-      )}
     </>
   )
 }
