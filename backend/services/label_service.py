@@ -9,6 +9,10 @@ class LabelService:
     def get_labels(self, db):
         labels = db.query(Finance_Label).all()
         return labels
+    
+    def get_label_by_name(self, db, name):
+        label = db.query(Finance_Label).filter_by(name=name).first()
+        return label
 
     def create_label(self, db, name, display_name):
         db.add(Finance_Label(name=name, display_name=display_name))
@@ -45,3 +49,12 @@ class LabelService:
                 db.add(Finance_Transaction_Label(transaction_id=transaction.id, label_id=label_id))
         db.commit()
         return {"message": f"Successfully added label {label_id} to {applied_counter} transactions containing the keyword '{keyword}'. {len(transactions) - applied_counter} transactions already had the label."}
+    
+    def apply_label_rules_from_file(self, db, rules_file = "keyword_matches.txt"):
+        with open(rules_file, "r") as file:
+            for line in file:
+                keyword, label_name = line.strip().split(";")
+                label = self.get_label_by_name(db, label_name)
+                if not label:
+                    continue
+                print(self.add_label_by_keyword(db, keyword, label.id))

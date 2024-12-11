@@ -55,6 +55,10 @@ def remove_label_from_transaction(transaction_id: int, label_id: int, db: Sessio
 def add_label_by_keyword(keyword: str, label_id: int, db: Session = Depends(get_db)):
     return label_service.add_label_by_keyword(db, keyword, label_id)
 
+@app.post("/transactions/auto-label-from-file")
+def apply_label_rules_from_file(db: Session = Depends(get_db)):
+    return label_service.apply_label_rules_from_file(db)
+
 @app.get("/transactions/grouped-by-label")
 def read_finance_transactions_grouped_by_label(
     start_date: str = Query(None, description="Start date in DD.MM.YYYY format"),
