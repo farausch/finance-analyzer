@@ -39,7 +39,6 @@ class TransactionService:
             .filter(Finance_Transaction.transaction_date >= start_date_parsed, Finance_Transaction.transaction_date <= end_date_parsed)
             .options(
                 joinedload(Finance_Transaction.labels),
-                joinedload(Finance_Transaction.categories)
             )
             .order_by(Finance_Transaction.transaction_date.desc())
             .all()
@@ -53,7 +52,6 @@ class TransactionService:
             .filter(Finance_Transaction.id == transaction_id)
             .options(
                 joinedload(Finance_Transaction.labels),
-                joinedload(Finance_Transaction.categories)
             )
             .first()
         )
