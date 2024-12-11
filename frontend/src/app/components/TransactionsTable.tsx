@@ -2,12 +2,10 @@
 
 import React from 'react';
 import { Table, TableColumnsType, Tag } from 'antd';
-import { TableRowSelection } from 'antd/es/table/interface';
 import { FinanceLabel, FinanceTransaction } from '../custom_types';
 
 export type MatchingTableProps = {
   transactions: FinanceTransaction[];
-  setSelectedFinanceTransactions: React.Dispatch<React.SetStateAction<FinanceTransaction[]>>;
   onSingleRowClick: (record: FinanceTransaction) => void;
 };
 
@@ -15,7 +13,7 @@ const columns: TableColumnsType<FinanceTransaction> = [
   {
     title: 'Datum',
     dataIndex: 'transaction_date',
-    width: '7%',
+    width: '10%',
     ellipsis: true,
     render: (text: string) => {
       const date = new Date(text);
@@ -35,21 +33,15 @@ const columns: TableColumnsType<FinanceTransaction> = [
   {
     title: 'Betrag',
     dataIndex: 'value',
-    width: '7%',
+    width: '10%',
     render: (text: number) => {
       return text.toFixed(2) + ' €';
     }
   },
   {
-    title: 'Typ',
-    dataIndex: 'tx_type',
-    width: '10%',
-    ellipsis: true,
-  },
-  {
     title: 'Labels',
     dataIndex: 'labels',
-    width: '10%',
+    width: '15%',
     ellipsis: true,
     render: (labels: FinanceLabel[]) => {
       return <>
@@ -59,38 +51,13 @@ const columns: TableColumnsType<FinanceTransaction> = [
       </>;
     }
   },
-  {
-    title: 'Importdatei',
-    dataIndex: 'import_file',
-    width: '10%',
-    ellipsis: true,
-  },
-  {
-    title: 'Importdatum',
-    dataIndex: 'import_date',
-    width: '7%',
-    render: (text: string) => {
-      const date = new Date(text);
-      return date.toLocaleDateString('de-DE');
-    }
-  }
 ];
 
-const MatchingTable =  ({transactions, setSelectedFinanceTransactions, onSingleRowClick}: MatchingTableProps) => {
-
-  const rowSelection: TableRowSelection<FinanceTransaction> = {
-    onSelect: (record, selected, selectedRows) => {
-      setSelectedFinanceTransactions(selectedRows);
-    },
-    onChange: (selectedRowKeys, selectedRows) => {
-      setSelectedFinanceTransactions(selectedRows);
-    }
-  };
+const TransactionsTable =  ({transactions, onSingleRowClick}: MatchingTableProps) => {
 
   return (
     <>
       <Table<FinanceTransaction>
-        rowSelection={rowSelection}
         onRow={(record) => {
           return {
             onClick: () => {
@@ -105,4 +72,4 @@ const MatchingTable =  ({transactions, setSelectedFinanceTransactions, onSingleR
   );
 };
 
-export default MatchingTable;
+export default TransactionsTable;

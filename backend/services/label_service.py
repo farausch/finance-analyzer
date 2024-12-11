@@ -20,6 +20,11 @@ class LabelService:
         db.commit()
         return {"message": f"Successfully added label {label_id} to transaction {transaction_id}."}
     
+    def remove_label_from_transaction(self, db, transaction_id, label_id):
+        db.query(Finance_Transaction_Label).filter_by(transaction_id=transaction_id, label_id=label_id).delete()
+        db.commit()
+        return {"message": f"Successfully removed label {label_id} from transaction {transaction_id}."}
+    
     def add_label_by_keyword(self, db: Session, keyword: str, label_id: int):
         transactions = (
             db.query(Finance_Transaction)
