@@ -10,7 +10,6 @@ export type FinanceTransaction = {
     account_number: string;
     import_date: string;
     labels?: FinanceLabel[];
-    categories?: FinanceCategory[];
 };
 
 export type FinanceLabel = {
@@ -19,8 +18,13 @@ export type FinanceLabel = {
     display_name: string;
 }
 
-export type FinanceCategory = {
-    id: number;
-    name: string;
-    display_name: string;
+export type FinanceStats = {
+    label: FinanceLabel;
+    total_value: number;
+}
+
+export type FinanceStatsByMonth = {
+    month: number;
+    monthName: string;
+    stats: FinanceStats[];
 }

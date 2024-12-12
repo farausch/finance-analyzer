@@ -25,7 +25,7 @@ export default function FinanceTransactions() {
     setFinanceTransactions(transactions);
   }
 
-  const getTransactionsForCurrentMonth = async () => {
+  const getTransactionsForSelectedMonth = async () => {
     if (currentSelectedMonth) getTransactionsForMonth(currentSelectedMonth);
   }
 
@@ -58,7 +58,7 @@ export default function FinanceTransactions() {
         setOpen={setTransactionDetailsDrawerOpen}
         financeTransaction={clickedFinanceTransaction}
         setFinanceTransaction={setClickedFinanceTransaction}
-        triggerTransactionsFetch={getTransactionsForCurrentMonth}
+        triggerTransactionsFetch={getTransactionsForSelectedMonth}
       />}
     </>
   )

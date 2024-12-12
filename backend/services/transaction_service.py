@@ -81,7 +81,7 @@ class TransactionService:
             raise HTTPException(status_code=400, detail="start_date must be before or equal to end_date")
 
         grouped_data = (
-            db.query(Finance_Label.display_name, func.sum(Finance_Transaction.value).label("total_value"))
+            db.query(Finance_Label, func.sum(Finance_Transaction.value).label("total_value"))
             .join(Finance_Transaction.labels)
             .filter(Finance_Transaction.transaction_date >= start_date_parsed,
                     Finance_Transaction.transaction_date <= end_date_parsed)
