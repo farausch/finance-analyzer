@@ -34,7 +34,7 @@ class LZOConfig(ProviderConfig):
             'delimiter': ';',
             'quotechar': '"',
             'skipinitialspace': True,
-            'encoding': 'ISO-8859-1'
+            'encoding': 'UTF-8'
         }
     
     def preprocess(self, row):
