@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "antd": "^5.22.1",
-    "next": "14.2.18",
+    "next": "14.2.33",
     "plotly.js": "^2.35.2",
     "plotly.js-dist": "^2.35.2",
     "react": "^18",
