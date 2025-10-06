@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "antd": "^5.22.1",
+    "antd": "^5.27.4",
     "next": "14.2.33",
     "plotly.js": "^2.35.2",
     "plotly.js-dist": "^2.35.2",
