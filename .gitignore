@@ -5,6 +5,7 @@ data/
 cheatsheet.txt
 manage_pg_instance.sh
 **/keyword_matches.txt
+backend/pyenv/
 
 .vscode/
 
