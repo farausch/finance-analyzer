@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import "antd/dist/reset.css";
+import { AppHeader } from "./components/AppHeader";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,11 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="pl-4 pt-3 pb-3 text-3xl font-extrabold">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-cyan-700">
-              Finance Analyzer
-          </span>
-        </div>
+        <AppHeader />
         <hr />
         {children}
       </body>
