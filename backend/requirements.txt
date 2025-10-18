@@ -2,4 +2,4 @@ cloud-sql-python-connector[pg8000]==1.13.0
 SQLAlchemy==2.0.36
 fastapi==0.119.0
 uvicorn==0.32.0
-python-multipart==0.0.17
+python-multipart==0.0.20
